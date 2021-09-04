@@ -98,6 +98,7 @@ __all__ = (
     'MissingFlagArgument',
     'TooManyFlags',
     'MissingRequiredFlag',
+    'FormattedDatetimeConversionFailure',
 )
 
 class CommandError(DiscordException):
@@ -995,3 +996,16 @@ class MissingFlagArgument(FlagError):
     def __init__(self, flag: Flag) -> None:
         self.flag: Flag = flag
         super().__init__(f'Flag {flag.name!r} does not have an argument')
+
+class FormattedDatetimeConversionFailure(BadArgument):
+    """Exception raised when the timestamp provided does not match the correct
+    format.
+    This inherits from :exc:`BadArgument`
+    Attributes
+    -----------
+    argument: :class:`str`
+        The emoji supplied by the caller that did not match the regex
+    """
+    def __init__(self, argument):
+        self.argument = argument
+        super().__init__(f'Timestamp "{argument}" wasn\'t formatted correctly.')
