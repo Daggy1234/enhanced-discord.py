@@ -1021,3 +1021,24 @@ def raise_expected_coro(coro, error: str)-> TypeError:
     if not asyncio.iscoroutinefunction(coro):
         raise TypeError(error)
     return coro
+
+def resolve_formatted_dt(formatted_dt: str) -> Optional[Tuple[datetime.datetime, Optional[str]]]:
+    """A helper function that can take discord formatted datetimes  like those produced by :meth:`~discord.utils.format_dt`
+    and return the relevant datetime. 
+    If unable to parse a datetime from formatted_dt, it will return None.
+    .. versionadded:: 2.0
+    Parameters
+    -----------
+    formatted_dt: :class:`str`
+        The formatted datetime string.
+    Returns
+    --------
+    Optional[Tuple[:class:`datetime.datetime`, Optional[:class:`str`]]
+        A tuple containing the datetime and the flag if present. Otherwise None.
+    """
+    match = re.match(r'<t:(-?[0-9]+)(:[tTdDfFR])?>$', formatted_dt)
+    if match:
+        try:
+            return datetime.datetime.fromtimestamp(int(match.group(1)), tz=datetime.timezone.utc), match.group(2)
+        except (ValueError, OverflowError, OSError):
+            return
