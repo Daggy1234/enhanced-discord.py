@@ -24,8 +24,3 @@ jobs:
           npm install -g pyright
           pip install -r requirements.txt
           pyright --lib --verifytypes discord --ignoreexternal
-     
-      - name: Lint Code Base
-        uses: github/super-linter@v4
-        env:
-          VALIDATE_ALL_CODEBASE: false
